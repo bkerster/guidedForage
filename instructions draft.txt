@@ -1,0 +1,11 @@
+You have been placed in charge of the USS Stargazer. The Stargazer is a peaceful ship whose mission is to explore space for new worlds, as a source of resources for the United Federation of planets.
+
+You explore space by sending probes out into space.
+Each probe can only scan a small subsection of space, and you have a limited supply.
+You will need to decide the destination of your probes wisely.
+
+Probes are deployed by clicking anywhere in space. They will scan the area of space indicated around your mouse cursor. Each time you scan, a small white box will appear for a short time demonstrating the area that was scanned. If you find a planet the box will appear yellow instead, and the number of planets found will be added to your score. Try to find as many planets as you can before running out of probes.
+
+You will be given 3 attempts to locate planets in different areas of space. After you run out of probes you will begin in the next area. After you run out of probes for the third time the task will be complete.
+
+The Federation recognizes its best! Your score across all 3 trials will be tallied and compared to other participants. With skill, and a bit of luck YOU could be immortalized on the Leaderboards!
