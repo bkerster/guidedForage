@@ -25,6 +25,7 @@ package {
 	import fl.transitions.easing.*;
 	import fl.motion.MatrixTransformer;
 	import hiScoreClass
+	import Location
 	//import org.myjerry.as3extensions.io.FileStreamWithLineReader;
 
 	public class ForagingDist extends MovieClip {
@@ -189,6 +190,8 @@ package {
 			
 		public static const SPEED_INCREMENT:Number = 10;
 		public static const ZOOM_FACTOR:Number = 15;
+		
+		public static const BOX_SIZE:Number = 15;
 			
 		//*************************
 		// Constructor:
@@ -484,6 +487,16 @@ package {
 		//builds the node list from the data
 		protected function urlLoader_complete(event:Event):void
 		{
+			//build a 2d array to hold the locations
+			for (var i:int=0; i<ENVIRONMENT_XWINDOW; i++) {
+				node[i] = new Array(ENVIRONMENT_YWINDOW)
+				for (var j:int=0; j < ENVIRONMENT_YWINDOW, j++) {
+					node[i][j] = new Location(i,j);
+				}
+			}
+			
+			
+			
 			var resources:String = urlLoader.data; 
 			var lines:Array = resources.split("\n");
 			//remove previously placed nodes and empty the array
@@ -496,24 +509,11 @@ package {
 			//the final line is empty, so skip it
 			for (var i:int = 0; i < lines.length - 1; i++) {
 				var line:Array = lines[i].split(" ");
-				if (Number(line[2]) > 1) {
-					nodes[i] = new asteroid2();
-				}
-				else {
-					nodes[i] = new asteroid();
-				}
-				nodes[i].x = Number(line[0]); //set x location
-				nodes[i].y = Number(line[1]); //set y location
-				nodes[i].rotation = Math.floor(Math.random()*(1+180+180))-180; 
 				
-				nodes[i][1] = Number(line[2]); //set resource value
-				nodes[i][2] = 0; //set to "unfound" state
+				nodes[Number(line[0])][Number(line[1])].accessValue = Number(line[2]);
+
 				totalStars += Number(line[2]);
-				
-				if (trialNum >= 0) {
-					nodes[i].scaleX = 1 / ZOOM_FACTOR;
-					nodes[i].scaleY = 1 / ZOOM_FACTOR;
-				}
+
 			}
 			scoreDisplay.text = "[ " + score + " ]";
 		}
@@ -701,6 +701,7 @@ package {
 
 				var selection:int = int(Math.floor(Math.random() * (1+randPicker.length-1-0)) + 0);
 				currentTrial = randPicker[selection];
+				/*
 				randPicker.splice(selection, 1)
 				trace("Background:" + String(currentTrial));
 				//trace(randPicker.length);
@@ -734,7 +735,8 @@ package {
 			backGroundSprite.graphics.drawRect(0,0,VIEW_XWINDOW,VIEW_YWINDOW);
 			backGroundSprite.graphics.endFill();
 			starField.addChild(backGroundSprite);
-
+			*/
+			
 			readStars(currentTrial);
 
 			starField.x = 0;
@@ -912,6 +914,24 @@ package {
 			}
 		}
 		
+		public function findLocation(mX:Number, mY:Number)
+		{
+			var scaledX = mX / BOX_SIZE;
+			var scaledY = mY / BOX_SIZE;
+			loc = locations[scaledX][scaledY];
+			if (loc.visited) {
+				return -1; 
+			}
+			loc.visited = true;
+			drawVisited(loc);
+			
+			return loc.score;
+		}
+		
+		public function drawVisited(loc:Location)
+		{
+			
+		}
 		
 		//Used to check 
 		public function checkCollision(mX:Number, mY:Number):Boolean
