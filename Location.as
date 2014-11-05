@@ -15,7 +15,16 @@ package  {
 			value = val;
 			image = new BlackSquare();
 		}
-		public function get accessX():String 
+		
+		public function Location(xx, yy) {
+			x = xx;
+			y = yy;
+			visited = false;
+			value = 0;
+			image = new BlackSquare();
+		}
+		
+		public function get accessX():Number 
 		{ 
 			return x; 
 		} 
@@ -24,7 +33,7 @@ package  {
 			x = setValue; 
 		}
 		
-		public function get accessY():String 
+		public function get accessY():Number 
 		{ 
 			return y; 
 		} 
@@ -49,6 +58,15 @@ package  {
 		public function set accessValue(setValue:Number):void
 		{
 			value = setValue;
+		}
+		
+		public function get accessImage():Sprite 
+		{ 
+			return image; 
+		} 
+		public function set accessImage(setValue:Sprite):void 
+		{ 
+			image = setValue; 
 		}
 	}
 	

@@ -483,37 +483,28 @@ package {
 			}
 		}
 		
-		//called after readstars completes
-		//builds the node list from the data
 		protected function urlLoader_complete(event:Event):void
 		{
+			nodes = new Array(ENVIRONMENT_XWINDOW/16);
 			//build a 2d array to hold the locations
-			for (var i:int=0; i<ENVIRONMENT_XWINDOW; i++) {
-				node[i] = new Array(ENVIRONMENT_YWINDOW)
-				for (var j:int=0; j < ENVIRONMENT_YWINDOW, j++) {
-					node[i][j] = new Location(i,j);
+			for (var i:int=0; i<ENVIRONMENT_XWINDOW/16; i++) {
+				nodes[i] = new Array(ENVIRONMENT_YWINDOW/16)
+				for (var j:int=0; j < ENVIRONMENT_YWINDOW/16, j++) {
+					nodes[i][j] = new Location(i,j);
 				}
 			}
-			
-			
 			
 			var resources:String = urlLoader.data; 
 			var lines:Array = resources.split("\n");
-			//remove previously placed nodes and empty the array
-			if (trialNum >= 1) {
-				for (var count:Number = 0; count < nodes.length; count++) {
-					nodes.pop();
-				}
-			}
-			//go through file a line at a time to build the collection of nodes
-			//the final line is empty, so skip it
+			
 			for (var i:int = 0; i < lines.length - 1; i++) {
 				var line:Array = lines[i].split(" ");
 				
-				nodes[Number(line[0])][Number(line[1])].accessValue = Number(line[2]);
-
+				var x:int = int(int(line[0]) / 16);
+				var y:int = int(int(line[1]) / 16);
+				nodes[x][y].accessValue = nodes[x][y].accessValue + int(line[2]);
+				
 				totalStars += Number(line[2]);
-
 			}
 			scoreDisplay.text = "[ " + score + " ]";
 		}
