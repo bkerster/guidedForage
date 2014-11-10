@@ -1,4 +1,8 @@
 package  {
+	import flash.display.*;
+	import flash.events.*;
+	import flash.geom.*;
+	import flash.net.*;
 	
 	public class Location {
 		
@@ -8,7 +12,7 @@ package  {
 		private var value:Number;
 		private var _image:MovieClip;
 		
-		public function Location(xx, yy, visit:Boolean=False, val:Number=0) {
+		public function Location(xx, yy, visit:Boolean=false, val:Number=0) {
 			x = xx;
 			y = yy;
 			visited = visit;
@@ -26,7 +30,7 @@ package  {
 			// image = new BlackSquare();
 		// }
 		
-		public function get accessX():Number 
+		public function get accessX():int 
 		{ 
 			return x; 
 		} 
@@ -36,7 +40,7 @@ package  {
 			_image.x = x;
 		}
 		
-		public function get accessY():Number 
+		public function get accessY():int 
 		{ 
 			return y; 
 		} 
@@ -46,7 +50,7 @@ package  {
 			_image.y = y;
 		}
 		
-		public function get accessVisited():int
+		public function get accessVisited():Boolean
 		{
 			return visited;
 		}
@@ -64,11 +68,11 @@ package  {
 			value = setValue;
 		}
 		
-		public function get image():Sprite 
+		public function get image():MovieClip 
 		{ 
 			return _image; 
 		} 
-		public function set image(setValue:Sprite):void 
+		public function set image(setValue:MovieClip):void 
 		{ 
 			_image = setValue; 
 		}

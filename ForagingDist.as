@@ -489,9 +489,9 @@ package {
 		{
 			nodes = new Array(ENVIRONMENT_XWINDOW/16);
 			//build a 2d array to hold the locations
-			for (var i:int=0; i<ENVIRONMENT_XWINDOW/16; i++) {
+			for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
 				nodes[i] = new Array(ENVIRONMENT_YWINDOW/16)
-				for (var j:int=0; j < ENVIRONMENT_YWINDOW/16, j++) {
+				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
 					nodes[i][j] = new Location(i,j);
 				}
 			}
@@ -729,7 +729,7 @@ package {
 			backGroundSprite.graphics.endFill();
 			starField.addChild(backGroundSprite);
 			*/
-			
+			}
 			readStars(currentTrial);
 
 			starField.x = 0;
@@ -746,7 +746,7 @@ package {
 			
 			//draw all locations
 			for (var i:int=0; i<ENVIRONMENT_XWINDOW/16; i++) {
-				for (var j:int=0; j < ENVIRONMENT_YWINDOW/16, j++) {
+				for (var j:int=0; j < ENVIRONMENT_YWINDOW/16; j++) {
 					starField.addChild(nodes[i][j].image);
 				}
 			}
@@ -913,7 +913,7 @@ package {
 				}
 			}
 		}
-		
+		/*
 		public function findLocation(mX:Number, mY:Number)
 		{
 			var scaledX = mX / BOX_SIZE;
@@ -927,7 +927,7 @@ package {
 			
 			return loc.score;
 		}
-		
+		*/
 		public function drawVisited(loc:Location)
 		{
 			
