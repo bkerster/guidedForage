@@ -483,6 +483,8 @@ package {
 			}
 		}
 		
+		//called after readstars completes
+		//builds the node list from the data
 		protected function urlLoader_complete(event:Event):void
 		{
 			nodes = new Array(ENVIRONMENT_XWINDOW/16);
@@ -741,6 +743,13 @@ package {
 			boardMask.graphics.endFill();
 			starField.addChild(boardMask);
 			backGroundSprite.mask = boardMask;
+			
+			//draw all locations
+			for (var i:int=0; i<ENVIRONMENT_XWINDOW/16; i++) {
+				for (var j:int=0; j < ENVIRONMENT_YWINDOW/16, j++) {
+					starField.addChild(nodes[i][j].image);
+				}
+			}
 			
 			// draw ship and add
 			uiContainer.x = 0;

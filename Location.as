@@ -6,7 +6,7 @@ package  {
 		private var y:int;
 		private var visited:Boolean;
 		private var value:Number;
-		private var image:MovieClip;
+		private var _image:MovieClip;
 		
 		public function Location(xx, yy, visit:Boolean=False, val:Number=0) {
 			x = xx;
@@ -14,15 +14,17 @@ package  {
 			visited = visit;
 			value = val;
 			image = new BlackSquare();
+			image.x = x * 16;
+			image.y = y * 16;
 		}
 		
-		public function Location(xx, yy) {
-			x = xx;
-			y = yy;
-			visited = false;
-			value = 0;
-			image = new BlackSquare();
-		}
+		// public function Location(xx, yy) {
+			// x = xx;
+			// y = yy;
+			// visited = false;
+			// value = 0;
+			// image = new BlackSquare();
+		// }
 		
 		public function get accessX():Number 
 		{ 
@@ -31,6 +33,7 @@ package  {
 		public function set accessX(setValue:int):void 
 		{ 
 			x = setValue; 
+			_image.x = x;
 		}
 		
 		public function get accessY():Number 
@@ -39,7 +42,8 @@ package  {
 		} 
 		public function set accessY(setValue:int):void 
 		{ 
-			Y = setValue; 
+			y = setValue; 
+			_image.y = y;
 		}
 		
 		public function get accessVisited():int
@@ -60,13 +64,21 @@ package  {
 			value = setValue;
 		}
 		
-		public function get accessImage():Sprite 
+		public function get image():Sprite 
 		{ 
-			return image; 
+			return _image; 
 		} 
-		public function set accessImage(setValue:Sprite):void 
+		public function set image(setValue:Sprite):void 
 		{ 
-			image = setValue; 
+			_image = setValue; 
+		}
+		
+		public function setXY(xx:Number, yy:Number)
+		{
+			x = xx;
+			y = yy;
+			_image.x = x;
+			_image.y = y;
 		}
 	}
 	
