@@ -1,0 +1,3 @@
+display the grid during trials
+-move box so it appears in the grid instead of at cursor
+remove the move-time condition

@@ -155,7 +155,7 @@ package {
 		public var urlLoader:URLLoader = new URLLoader();
 		public var hiUrlLoader:URLLoader = new URLLoader();
 		
-		public var cursorBox = new CursorBox();
+		//public var cursorBox = new CursorBox();
 		// output functionality (moved these into the individual functions
 		
 		/*
@@ -191,7 +191,7 @@ package {
 		public static const SPEED_INCREMENT:Number = 10;
 		public static const ZOOM_FACTOR:Number = 15;
 		
-		public static const BOX_SIZE:Number = 15;
+		public static const BOX_SIZE:Number = 16;
 			
 		//*************************
 		// Constructor:
@@ -262,8 +262,8 @@ package {
 			frameNumber++;
 			if (fuel > 0) {
 				positionArray[frameNumber] = [ship.x,ship.y,scanMode,score]; //used for printout
-				cursorBox.x = mouseX;
-				cursorBox.y = mouseY;
+				//cursorBox.x = mouseX;
+				//cursorBox.y = mouseY;
 				
 				//change fuel
 				var dist:Number = getDistance(prevX, prevY, ship.x, ship.y);
@@ -330,28 +330,31 @@ package {
 				//store starting coords of mouse and ship
 				var mX:Number = mouseX;
 				var mY:Number = mouseY;
-				//if a click occurs: draw the box. 
-				//check either collison with the box (no)
-				// or check stars in a given area
-				//then reduce fuel
-				if (mX > 0 && mY > 0 && mX < VIEW_XWINDOW && mY < VIEW_YWINDOW) {
-					fuel--;
-					if (moveTimeCondition) {
-						clicksAllowed = false;
-						locX = mX;
-						locY = mY;
-						moveTime();
-					}
-					else {
-						var foundResource:Boolean = checkCollision(mX, mY);
-						drawSquare(foundResource, mX, mY);
-					}
-				}				
 				
+				//make sure the box hasn't been explored
+				var smallX:int = int(mX / BOX_SIZE);
+				var smallY:int = int(mY / BOX_SIZE);
+				
+				if (nodes[smallX][smallY].accessVisited == false) {
+					//if a click occurs: draw the box. 
+					//check either collison with the box (no)
+					// or check stars in a given area
+					//then reduce fuel
+					if (mX > 0 && mY > 0 && mX < VIEW_XWINDOW && mY < VIEW_YWINDOW) {
+						fuel--;
+						
+						
+						
+						var foundResource:Boolean = checkCollision(smallX, smallY);
+						drawSquare(foundResource, smallX, smallY);
+						
+					}			
+					printOut("Click");
+				}
 
 			}
 			
-			printOut("Click");
+			
 		}
 /*
 		protected function keyPressHandler(event:KeyboardEvent):void
@@ -452,7 +455,7 @@ package {
 			if (trialNum == -1) {
 				//remove the preview nodes. make sure this gets called properly
 				trace(nodes.length);
-				for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
+				for (var i:int=0; i < (ENVIRONMENT_XWINDOW/16); i++) {
 					for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
 						starField.removeChild(nodes[i][j].image);
 					}
@@ -680,13 +683,15 @@ package {
 		//Initializes the experiment to begin a trial
 		public function init():void
 		{
-
+			trace("INIT");
 			trace("Trial Num: " + String(trialNum) );
 			var str:String = "\nStart Trial " + String(trialNum) + " moveTime " + String(moveTimeCondition) + " PLAYER " + playerName + "\n";
 			outputArray.push(str);
 			
 			if (trialNum == 0) {
-				backGroundSprite.graphics.beginBitmapFill(new Hubble0(0, 0), null, false);
+				backGroundSprite.graphics.beginFill(0x000000, 1);
+				backGroundSprite.graphics.drawRect(0, 0, (VIEW_XWINDOW), (VIEW_YWINDOW));
+				backGroundSprite.graphics.endFill();
 				fuel = startFuel;
 				currentTrial = 0;
 			}
@@ -722,14 +727,17 @@ package {
 						backGroundSprite.graphics.beginBitmapFill(new Hubble1(0, 0), null, false);
 						break;
 				}
+				*/
+				backGroundSprite.graphics.beginFill(0x000000, 1);
+				backGroundSprite.graphics.drawRect(0, 0, (VIEW_XWINDOW), (VIEW_YWINDOW));
+				backGroundSprite.graphics.endFill();
 			}
 
 			
-			backGroundSprite.graphics.drawRect(0,0,VIEW_XWINDOW,VIEW_YWINDOW);
-			backGroundSprite.graphics.endFill();
+			//backGroundSprite.graphics.drawRect(0,0,VIEW_XWINDOW,VIEW_YWINDOW);
+			//backGroundSprite.graphics.endFill();
 			starField.addChild(backGroundSprite);
-			*/
-			}
+			
 			readStars(currentTrial); 
 
 			starField.x = 0;
@@ -744,19 +752,19 @@ package {
 			starField.addChild(boardMask);
 			backGroundSprite.mask = boardMask;
 			
-			/*
+			
 			//draw all locations
-			for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
+			for (var i:int=0; i < (ENVIRONMENT_XWINDOW/16); i++) {
 				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
 					starField.addChild(nodes[i][j].image);
 				}
 			}
-			*/
+			
 			// draw ship and add
 			uiContainer.x = 0;
 			uiContainer.y = 0;
 			addChild(uiContainer);
-			uiContainer.addChild(cursorBox);
+			//uiContainer.addChild(cursorBox);
 			// ship.x = (VIEW_XWINDOW / 2);
 			// ship.y = (VIEW_YWINDOW / 2);
 			//uiContainer.addChild(ship);
@@ -929,23 +937,11 @@ package {
 		//Used to check 
 		public function checkCollision(mX:Number, mY:Number):Boolean
 		{
-			var scanWidth:Number = 15;
-			var scanRadius:Number = scanWidth / 2;
 			var scoreIncrease:int = 0;
-			var found:Array = new Array();
 			
-			
-			//checks if its inside the square.
-			for (var i:int = 1; i < nodes.length; i++) {
-				if ( (nodes[i].x > (mX - scanRadius)) && (nodes[i].x <= (mX + scanRadius)) && (nodes[i].y > (mY - scanRadius)) && (nodes[i].y <= (mY + scanRadius) ) && nodes[i][1] > 0 ) {
-					//check to make sure I'm getting the correct values
-					scoreIncrease += nodes[i][1]
-					nodes[i][1] = 0;
-					found.push(i);
-				}
-			}
+			scoreIncrease = nodes[mX][mY].accessValue
+			nodes[mX][mY].accessVisisted = true;
 
-			
 			if (scoreIncrease > 0) {
 				buzzChannel.stop();
 				var coinSound:Sound;
@@ -992,9 +988,7 @@ package {
 						coinChannel = coinSound.play();
 						break;
 				}
-				for (i = found.length; i >= 0; i--) {
-					nodes.splice(found[i], 1);
-				}
+				
 				//Change the score Display on score
 				var format:TextFormat = new TextFormat();
 				format.color = 0xFFFF00;
@@ -1174,11 +1168,13 @@ package {
 			}
 			*/
 			//test our tiling
+			
 			for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
 				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
 					starField.addChild(nodes[i][j].image);
 				}
 			}
+			
 			instructField.text = "JUST AN\n\nEXAMPLE";
 			addChild(instructField);
 			trace("Preview");
@@ -1201,7 +1197,7 @@ package {
 			thrusterChannel.stop()
 			removeChild(fuelBar);
 			gameEnded = true;
-			uiContainer.removeChild(cursorBox);
+			//uiContainer.removeChild(cursorBox);
 			
 			if (trialNum == 1 || trialNum == 3) {
 				removeChild(instructField);
@@ -1719,25 +1715,18 @@ package {
 		
 		public function drawSquare( found:Boolean, mX:Number, mY:Number ):void
 		{
-			if (found) {				
-				// private var squareW = new SquareW();
-				var squareY = new SquareY();
-				stage.addChild(squareY);
-				squareY.x = mX;
-				squareY.y = mY;
-				squareY.gotoAndPlay(1);
-				
-				squareY.addEventListener(Event.ENTER_FRAME, squareYeventHandler);
+			trace(found, mX, mY);
+			if (found) {
+				starField.removeChild(nodes[mX][mY].image);
+				nodes[mX][mY].image = new YellowSquare();
+				starField.addChild(nodes[mX][mY].image);
 			}
-			else {				
-				var squareW = new SquareW();
-				stage.addChild(squareW);
-				squareW.x = mX;
-				squareW.y = mY;
-				squareW.gotoAndPlay(1);
-				
-				squareW.addEventListener(Event.ENTER_FRAME, squareWeventHandler);
+			else {
+				starField.removeChild(nodes[mX][mY].image);
+				nodes[mX][mY].image = new WhiteSquare();
+				starField.addChild(nodes[mX][mY].image);
 			}
+		
 		}
 		
 		public function moveTime( ):void
