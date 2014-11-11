@@ -54,7 +54,7 @@ package  {
 		{
 			return visited;
 		}
-		public function set accessVisisted(setValue:Boolean):void
+		public function set accessVisited(setValue:Boolean):void
 		{
 			visited = setValue;
 		}
@@ -85,6 +85,20 @@ package  {
 			y = yy;
 			_image.x = x;
 			_image.y = y;
+		}
+		
+		public function setWhiteImage():void
+		{
+			_image = new WhiteSquare();
+			_image.x = x * 16;
+			_image.y = y * 16;
+		}
+		
+		public function setYellowImage():void
+		{
+			_image = new YellowSquare();
+			_image.x = x * 16;
+			_image.y = y * 16;
 		}
 	}
 	

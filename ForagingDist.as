@@ -109,8 +109,8 @@ package {
 		
 		//fuel stuff
 		public var fuel:Number = 15;
-		//public var startFuel:Number = 15;
-		public var startFuel:Number = 300;
+		public var startFuel:Number = 20;
+		//public var startFuel:Number = 300;
 		public var fuelDisplay = new TextField();
 		public var prevX:Number = (VIEW_XWINDOW / 2);
 		public var prevY:Number = (VIEW_YWINDOW / 2);
@@ -461,6 +461,7 @@ package {
 						starField.removeChild(nodes[i][j].image);
 					}
 				}
+				instructField.textColor = 0xFFFFFF;
 				removeChild(instructField);
 				/*
 				trialNum++;
@@ -694,7 +695,8 @@ package {
 			var str:String = "\nStart Trial " + String(trialNum) + " moveTime " + String(moveTimeCondition) + " PLAYER " + playerName + "\n";
 			outputArray.push(str);
 
-			backGroundSprite.graphics.beginFill(0x000000, 1);
+			//backGroundSprite.graphics.beginFill(0x000000, 1);
+			backGroundSprite.graphics.beginBitmapFill(new blackpng(0, 0), null, true, true);
 			backGroundSprite.graphics.drawRect(0, 0, (VIEW_XWINDOW), (VIEW_YWINDOW));
 			backGroundSprite.graphics.endFill();
 			
@@ -722,11 +724,13 @@ package {
 			*/
 			
 			//draw all locations
+			/*
 			for (var i:int=0; i < (ENVIRONMENT_XWINDOW/BOX_SIZE); i++) {
 				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/BOX_SIZE); j++) {
 					grid.addChild(nodes[i][j].image);
 				}
 			}
+			*/
 			starField.addChild(grid);
 			
 			// draw ship and add
@@ -908,7 +912,7 @@ package {
 			var scoreIncrease:int = 0;
 			
 			scoreIncrease = nodes[mX][mY].accessValue
-			nodes[mX][mY].accessVisisted = true;
+			nodes[mX][mY].accessVisited = true;
 
 			if (scoreIncrease > 0) {
 				buzzChannel.stop();
@@ -1127,22 +1131,21 @@ package {
 			starField.y = 0;
 			addChild(starField);
 			
-			//draw the nodes (may need to change size)
-			/*
-			for (var i = 0; i < nodes.length; i++) {
-				starField.addChild(nodes[i]);
-				nodes[i].scaleX = 0.3;
-				nodes[i].scaleY = 0.3
-			}
-			*/
 			//test our tiling
 			
 			for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
 				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
+					if (nodes[i][j].accessValue > 0) {
+						nodes[i][j].setYellowImage();
+					}
+					else {
+						nodes[i][j].setWhiteImage();
+					}
 					starField.addChild(nodes[i][j].image);
 				}
 			}
 			
+			instructField.textColor = 0x0000FF;
 			instructField.text = "JUST AN\n\nEXAMPLE";
 			addChild(instructField);
 			trace("Preview");
@@ -1156,7 +1159,7 @@ package {
 		public function gameOver():void
 		{
 			totalScore += score;
-			trace("game over");
+			trace("game over " + String(trialNum));
 			stopShip();
 			if (zoomed) {
 				zoomOut();
@@ -1185,14 +1188,16 @@ package {
 			//draw all locations
 			for (var i:int=0; i < (ENVIRONMENT_XWINDOW/BOX_SIZE); i++) {
 				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/BOX_SIZE); j++) {
-					grid.removeChild(nodes[i][j].image);
+					if (nodes[i][j].accessVisited) {
+						grid.removeChild(nodes[i][j].image);
+					}
 				}
 			}
 			
 			//uiContainer.removeChild(ship);
 			outputArray.push("FINISHED\n");
 			//draw the restart game button
-			if (trialNum < 2) {
+			if (trialNum < 1) {
 				restartGameButton();
 			}
 			else {
@@ -1692,12 +1697,12 @@ package {
 		{
 	
 			if (found) {
-				grid.removeChild(nodes[mX][mY].image);
+				//grid.removeChild(nodes[mX][mY].image);
 				nodes[mX][mY].image = new YellowSquare();
 				grid.addChild(nodes[mX][mY].image);
 			}
 			else {
-				grid.removeChild(nodes[mX][mY].image);
+				//grid.removeChild(nodes[mX][mY].image);
 				nodes[mX][mY].image = new WhiteSquare();
 				grid.addChild(nodes[mX][mY].image);
 			}
