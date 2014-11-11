@@ -64,6 +64,7 @@ package {
 		
 		private var starField:Sprite = new Sprite();
 		private var uiContainer:Sprite = new Sprite();
+		private var grid = new Sprite();
 		
 		private var stars:Array = new Array();
 		private var overflowStars:Array = new Array();
@@ -107,7 +108,7 @@ package {
 		public var mcY_tween:Tween;
 		
 		//fuel stuff
-		public var fuel:Number;
+		public var fuel:Number = 15;
 		//public var startFuel:Number = 15;
 		public var startFuel:Number = 300;
 		public var fuelDisplay = new TextField();
@@ -316,7 +317,7 @@ package {
 					if (trialNum == 0) {
 						fuel = startFuel;
 					}
-					if (trialNum == 1 || trialNum == 3) {
+					if (trialNum == 0) {
 						fuel = 15;
 					}
 				}
@@ -454,18 +455,20 @@ package {
 			trace("Button TRIAL: " + String(trialNum));
 			if (trialNum == -1) {
 				//remove the preview nodes. make sure this gets called properly
-				trace(nodes.length);
-				for (var i:int=0; i < (ENVIRONMENT_XWINDOW/16); i++) {
-					for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
+				//trace(nodes.length);
+				for (var i:int=0; i < (ENVIRONMENT_XWINDOW/BOX_SIZE); i++) {
+					for (var j:int=0; j < (ENVIRONMENT_YWINDOW/BOX_SIZE); j++) {
 						starField.removeChild(nodes[i][j].image);
 					}
 				}
 				removeChild(instructField);
+				/*
 				trialNum++;
-				trace(trialNum);
+				//trace(trialNum);
 				//starField.removeChild(backGroundSprite);
 				removeChild(starField);
 				init();
+				*/
 				//stage.addEventListener(MouseEvent.CLICK, clickHandler);
 				// trace("TEST TEST TEST");
 				// trialNum++;
@@ -512,6 +515,9 @@ package {
 				totalStars += Number(line[2]);
 			}
 			scoreDisplay.text = "[ " + score + " ]";
+			if (trialNum >= 0) {
+				finishInit();
+			}
 		}
 		
 		protected function hiScoreUrlLoader_complete(event:Event):void
@@ -687,63 +693,25 @@ package {
 			trace("Trial Num: " + String(trialNum) );
 			var str:String = "\nStart Trial " + String(trialNum) + " moveTime " + String(moveTimeCondition) + " PLAYER " + playerName + "\n";
 			outputArray.push(str);
-			
-			if (trialNum == 0) {
-				backGroundSprite.graphics.beginFill(0x000000, 1);
-				backGroundSprite.graphics.drawRect(0, 0, (VIEW_XWINDOW), (VIEW_YWINDOW));
-				backGroundSprite.graphics.endFill();
-				fuel = startFuel;
-				currentTrial = 0;
-			}
-			else if (trialNum > 0 ) {
 
-				var selection:int = int(Math.floor(Math.random() * (1+randPicker.length-1-0)) + 0);
-				currentTrial = randPicker[selection];
-				/*
-				randPicker.splice(selection, 1)
-				trace("Background:" + String(currentTrial));
-				//trace(randPicker.length);
-				
-				switch( currentTrial ) {
-					case 1:
-						backGroundSprite.graphics.beginBitmapFill(new Hubble1(0, 0), null, false);
-						break;
-					case 2:
-						backGroundSprite.graphics.beginBitmapFill(new Hubble2(0, 0), null, false);
-						break;
-					case 3:
-						backGroundSprite.graphics.beginBitmapFill(new Hubble3(0, 0), null, false);
-						break;
-					case 4:
-						backGroundSprite.graphics.beginBitmapFill(new Hubble4(0, 0), null, false);
-						break;
-					case 5:
-						backGroundSprite.graphics.beginBitmapFill(new Hubble5(0, 0), null, false);
-						break;
-					case 6:
-						backGroundSprite.graphics.beginBitmapFill(new Hubble6(0, 0), null, false);
-						break;
-					default:
-						backGroundSprite.graphics.beginBitmapFill(new Hubble1(0, 0), null, false);
-						break;
-				}
-				*/
-				backGroundSprite.graphics.beginFill(0x000000, 1);
-				backGroundSprite.graphics.drawRect(0, 0, (VIEW_XWINDOW), (VIEW_YWINDOW));
-				backGroundSprite.graphics.endFill();
-			}
-
+			backGroundSprite.graphics.beginFill(0x000000, 1);
+			backGroundSprite.graphics.drawRect(0, 0, (VIEW_XWINDOW), (VIEW_YWINDOW));
+			backGroundSprite.graphics.endFill();
 			
-			//backGroundSprite.graphics.drawRect(0,0,VIEW_XWINDOW,VIEW_YWINDOW);
-			//backGroundSprite.graphics.endFill();
 			starField.addChild(backGroundSprite);
 			
 			readStars(currentTrial); 
 
+		}
+		
+		public function finishInit():void
+		{
+			trace("Finish INIT");
 			starField.x = 0;
 			starField.y = 0;
 			addChild(starField);
 			
+			/*
 			//mask to prevent image from leaving the field
 			var boardMask:Shape = new Shape();
 			boardMask.graphics.beginFill(0xDDDDDD);
@@ -751,14 +719,15 @@ package {
 			boardMask.graphics.endFill();
 			starField.addChild(boardMask);
 			backGroundSprite.mask = boardMask;
-			
+			*/
 			
 			//draw all locations
-			for (var i:int=0; i < (ENVIRONMENT_XWINDOW/16); i++) {
-				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
-					starField.addChild(nodes[i][j].image);
+			for (var i:int=0; i < (ENVIRONMENT_XWINDOW/BOX_SIZE); i++) {
+				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/BOX_SIZE); j++) {
+					grid.addChild(nodes[i][j].image);
 				}
 			}
+			starField.addChild(grid);
 			
 			// draw ship and add
 			uiContainer.x = 0;
@@ -786,13 +755,10 @@ package {
 			// Listen to keyboard presses
 			//stage.addEventListener(KeyboardEvent.KEY_DOWN,keyPressHandler);
 			
-			// Update screen every frame
-			addEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			
-			if (trialNum > 0 ) {
-				fuel = startFuel;
-			}
-			if (trialNum == 1 || trialNum == 3) {
+			fuel = startFuel;
+			
+			if (trialNum == 0) {
 				instructField.text = "PRACTICE";
 				addChild(instructField);
 				fuel = 15;
@@ -822,6 +788,8 @@ package {
 			drawFuelBar();
 			// uiContainer.addChild(ship);
 			//return true;
+			// Update screen every frame
+			addEventListener(Event.ENTER_FRAME,enterFrameHandler);
 		}
 		
 		//reads in stars from a text file based on the trial number
@@ -830,7 +798,7 @@ package {
 			totalStars = 0;
 			var path:String;
 			var map_num:Number = (Math.floor(Math.random() * (0 - 999 + 1)) + 0)
-			trace("Map Number: " + String(map_num));
+			trace("Read Stars: Map Number: " + String(map_num));
 			path = "maps/" + numStarCondition + "stars" + clusteringCondition + String(map_num) + ".txt";
 			trace(path);
 			
@@ -1214,11 +1182,17 @@ package {
 			removeEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			
 			trace("Removed event Listeners");
+			//draw all locations
+			for (var i:int=0; i < (ENVIRONMENT_XWINDOW/BOX_SIZE); i++) {
+				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/BOX_SIZE); j++) {
+					grid.removeChild(nodes[i][j].image);
+				}
+			}
 			
 			//uiContainer.removeChild(ship);
 			outputArray.push("FINISHED\n");
 			//draw the restart game button
-			if (trialNum < 4) {
+			if (trialNum < 2) {
 				restartGameButton();
 			}
 			else {
@@ -1257,7 +1231,7 @@ package {
 		public function restartGameButton():void
 		{
 			restartButton = new RestartButton();
-			if (trialNum > 0) {
+			if (trialNum >= 0) {
 				backGroundSprite.graphics.beginFill(0x000000, 1);
 				backGroundSprite.graphics.drawRect(0,0,VIEW_XWINDOW,VIEW_YWINDOW);
 				backGroundSprite.graphics.endFill();
@@ -1339,7 +1313,7 @@ package {
 		
 		public function displayInstructions():void
 		{
-
+			trace("Display Intructions " + String(trialNum));
 			switch (instructionNumber)
 			{
 				case 1:
@@ -1354,7 +1328,7 @@ package {
 					addChild(ship);
 					stage.addEventListener(MouseEvent.CLICK, instructionsClickHandler);
 					//for the preview later
-					readStars(0);
+					readStars(-1);
 					
 					break;
 				case 2:
@@ -1446,6 +1420,7 @@ package {
 		//displays instructions about the new condition mid-experiment
 		public function displayInstructions2():void
 		{
+			trace("instructions 2");
 			if (moveTimeCondition == true) {
 				instructField.text = "In the next trial the probes will deploy differently.\nThere will be a delay before you can deploy another probe based on the distance between deployments.\nYou will have a short practice trial to see the difference";
 			}
@@ -1715,16 +1690,16 @@ package {
 		
 		public function drawSquare( found:Boolean, mX:Number, mY:Number ):void
 		{
-			trace(found, mX, mY);
+	
 			if (found) {
-				starField.removeChild(nodes[mX][mY].image);
+				grid.removeChild(nodes[mX][mY].image);
 				nodes[mX][mY].image = new YellowSquare();
-				starField.addChild(nodes[mX][mY].image);
+				grid.addChild(nodes[mX][mY].image);
 			}
 			else {
-				starField.removeChild(nodes[mX][mY].image);
+				grid.removeChild(nodes[mX][mY].image);
 				nodes[mX][mY].image = new WhiteSquare();
-				starField.addChild(nodes[mX][mY].image);
+				grid.addChild(nodes[mX][mY].image);
 			}
 		
 		}

@@ -74,7 +74,9 @@ package  {
 		} 
 		public function set image(setValue:MovieClip):void 
 		{ 
-			_image = setValue; 
+			_image = setValue;
+			_image.x = x * 16;
+			_image.y = y * 16;
 		}
 		
 		public function setXY(xx:Number, yy:Number)
