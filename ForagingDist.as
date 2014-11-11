@@ -1100,7 +1100,7 @@ package {
 			fuelBar.x = VIEW_XWINDOW-420;
 			fuelBar.y = 10;
 			
-			fuelBG.graphics.beginFill(0x000000);
+			fuelBG.graphics.beginFill(0x000000, .4);
 			fuelBG.graphics.drawRect(VIEW_XWINDOW-425,5,410, 20);
 			fuelBG.graphics.endFill();
 			addChild(fuelBG);
@@ -1314,7 +1314,6 @@ package {
 		
 		public function displayInstructions():void
 		{
-			trace("Display Intructions " + String(trialNum));
 			switch (instructionNumber)
 			{
 				case 1:
