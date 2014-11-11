@@ -109,8 +109,8 @@ package {
 		
 		//fuel stuff
 		public var fuel:Number = 15;
-		public var startFuel:Number = 20;
-		//public var startFuel:Number = 300;
+		//public var startFuel:Number = 20;
+		public var startFuel:Number = 300;
 		public var fuelDisplay = new TextField();
 		public var prevX:Number = (VIEW_XWINDOW / 2);
 		public var prevY:Number = (VIEW_YWINDOW / 2);
@@ -343,9 +343,7 @@ package {
 					//then reduce fuel
 					if (mX > 0 && mY > 0 && mX < VIEW_XWINDOW && mY < VIEW_YWINDOW) {
 						fuel--;
-						
-						
-						
+
 						var foundResource:Boolean = checkCollision(smallX, smallY);
 						drawSquare(foundResource, smallX, smallY);
 						
@@ -354,8 +352,6 @@ package {
 				}
 
 			}
-			
-			
 		}
 /*
 		protected function keyPressHandler(event:KeyboardEvent):void
