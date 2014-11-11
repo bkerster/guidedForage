@@ -59,3 +59,9 @@ $RECYCLE.BIN/
 
 #project specific files
 *.map
+
+
+# ====================
+# Exclude the map files
+# ====================
+maps/

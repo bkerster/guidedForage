@@ -452,10 +452,10 @@ package {
 			if (trialNum == -1) {
 				//remove the preview nodes. make sure this gets called properly
 				trace(nodes.length);
-				for (var i = 0; i < nodes.length; i++) {
-					//nodes[i].height = 2.65;
-					//nodes[i].width = 2.64;
-					starField.removeChild(nodes[i]);
+				for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
+					for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
+						starField.removeChild(nodes[i][j].image);
+					}
 				}
 				removeChild(instructField);
 				trialNum++;
@@ -730,7 +730,7 @@ package {
 			starField.addChild(backGroundSprite);
 			*/
 			}
-			readStars(currentTrial);
+			readStars(currentTrial); 
 
 			starField.x = 0;
 			starField.y = 0;
@@ -744,13 +744,14 @@ package {
 			starField.addChild(boardMask);
 			backGroundSprite.mask = boardMask;
 			
+			/*
 			//draw all locations
-			for (var i:int=0; i<ENVIRONMENT_XWINDOW/16; i++) {
-				for (var j:int=0; j < ENVIRONMENT_YWINDOW/16; j++) {
+			for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
+				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
 					starField.addChild(nodes[i][j].image);
 				}
 			}
-			
+			*/
 			// draw ship and add
 			uiContainer.x = 0;
 			uiContainer.y = 0;
@@ -822,12 +823,6 @@ package {
 			var path:String;
 			var map_num:Number = (Math.floor(Math.random() * (0 - 999 + 1)) + 0)
 			trace("Map Number: " + String(map_num));
-			// if (clustered) {
-				// path = "maps/150stars25" + String(map_num) + ".txt";
-			// }
-			// else{
-				// path = "maps/150stars5" + String(map_num) + ".txt";
-			// }
 			path = "maps/" + numStarCondition + "stars" + clusteringCondition + String(map_num) + ".txt";
 			trace(path);
 			
@@ -838,9 +833,7 @@ package {
 			//var urlLoader:URLLoader = new URLLoader();
 			urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
 			//urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
-			urlLoader.load(urlRequest);
-			
-			
+			urlLoader.load(urlRequest);	
 		}
 		
 		public function checkNodeCollision(collider):void
@@ -1173,11 +1166,18 @@ package {
 			addChild(starField);
 			
 			//draw the nodes (may need to change size)
-			
+			/*
 			for (var i = 0; i < nodes.length; i++) {
 				starField.addChild(nodes[i]);
 				nodes[i].scaleX = 0.3;
 				nodes[i].scaleY = 0.3
+			}
+			*/
+			//test our tiling
+			for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
+				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
+					starField.addChild(nodes[i][j].image);
+				}
 			}
 			instructField.text = "JUST AN\n\nEXAMPLE";
 			addChild(instructField);

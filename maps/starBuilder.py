@@ -83,8 +83,8 @@ def countDupes(dupedList):
 
 
 #filename = '2000stars3.txt'
-conditions = [ .05, .15, .25, .35, .5 ]
-stars = [ 25, 50, 100, 150 ]
+conditions = [ .1, .3, .5 ]
+stars = [ 100, 600, 1100 ]
 for prob in conditions:
 	for num_stars in stars:
 		for i in range(1000):
@@ -94,13 +94,13 @@ for prob in conditions:
 			#num_stars = 150
 			if len(str(prob)) == 3:
 				#filename = str(num_stars) + 'stars' + str(int(prob * 10)) + '-7.txt'
-				filename = '{0}stars{1}-{2}.txt'.format(num_stars, (int(prob*10)), i)
+				filename = '{0}stars{1}-{2}.txt'.format(str(num_stars).zfill(4), (int(prob*10)), i)
 			elif len(str(prob)) == 4:
 				if prob == .05:
-					filename = '{0}stars{1}-{2}.txt'.format(num_stars, '05', i)
+					filename = '{0}stars{1}-{2}.txt'.format(str(num_stars).zfill(4), '05', i)
 				#filename = str(num_stars) + 'stars' + str(int(prob * 10)) + '-7.txt'
 				else:
-					filename = '{0}stars{1}-{2}.txt'.format(num_stars, (int(prob*100)), i)
+					filename = '{0}stars{1}-{2}.txt'.format(str(num_stars).zfill(4), (int(prob*100)), i)
 			else:
 				print 'Error! Filename could not parse your prob!'
 				break
