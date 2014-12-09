@@ -100,6 +100,36 @@ package  {
 			_image.x = x * 16;
 			_image.y = y * 16;
 		}
+		
+		public function setImage(maxPoint):void
+		{
+			if (value > 0) {
+				setYellowImage();
+				var shade = RGBtoHEX(hitColor(value, maxPoint), 0, 0);
+				//trace(shade);
+				var myColorTransform = new ColorTransform();
+				myColorTransform.color = shade;
+				_image.transform.colorTransform = myColorTransform;
+			}
+			else {
+				setWhiteImage();
+			}
+		}
+		
+		public function hitColor(score, maxPoint):Number
+		{
+			//trace(score, maxPoint);
+			var ratio = 155 / maxPoint;
+			var shade = score * ratio + 100;
+			return Math.floor(shade);
+		}
+		
+		public function RGBtoHEX(r, g, b) {
+			//trace(r,g,b);
+			var s = (r << 16 | g << 8 | b).toString(16); 
+			while(s.length < 6) s="0"+s;
+			return "0x"+s;
+		}
 	}
 	
 }

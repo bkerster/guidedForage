@@ -118,6 +118,8 @@ package {
 		public var fuelBar = new FuelBar();
 		public var fuelBG:Shape = new Shape();
 		
+		public var maxPoint:Number;
+		
 		public var circle = new Circle();
 		public var clicksAllowed:Boolean = true;
 		
@@ -511,6 +513,17 @@ package {
 				
 				totalStars += Number(line[2]);
 			}
+			
+			//get largest point
+			maxPoint = 0;
+			for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
+				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
+					if (nodes[i][j].accessValue >= maxPoint) {
+						maxPoint = nodes[i][j].accessValue;
+					}
+				}
+			}
+			
 			scoreDisplay.text = "[ " + score + " ]";
 			if (trialNum >= 0) {
 				finishInit();
@@ -692,7 +705,7 @@ package {
 			outputArray.push(str);
 
 			//backGroundSprite.graphics.beginFill(0x000000, 1);
-			backGroundSprite.graphics.beginBitmapFill(new blackpng(0, 0), null, true, true);
+			backGroundSprite.graphics.beginBitmapFill(new blackgif(0, 0), null, true, true);
 			backGroundSprite.graphics.drawRect(0, 0, (VIEW_XWINDOW), (VIEW_YWINDOW));
 			backGroundSprite.graphics.endFill();
 			
@@ -1131,12 +1144,7 @@ package {
 			
 			for (var i:int=0; i<(ENVIRONMENT_XWINDOW/16); i++) {
 				for (var j:int=0; j < (ENVIRONMENT_YWINDOW/16); j++) {
-					if (nodes[i][j].accessValue > 0) {
-						nodes[i][j].setYellowImage();
-					}
-					else {
-						nodes[i][j].setWhiteImage();
-					}
+					nodes[i][j].setImage(maxPoint);
 					starField.addChild(nodes[i][j].image);
 				}
 			}
@@ -1690,18 +1698,8 @@ package {
 		
 		public function drawSquare( found:Boolean, mX:Number, mY:Number ):void
 		{
-	
-			if (found) {
-				//grid.removeChild(nodes[mX][mY].image);
-				nodes[mX][mY].image = new YellowSquare();
-				grid.addChild(nodes[mX][mY].image);
-			}
-			else {
-				//grid.removeChild(nodes[mX][mY].image);
-				nodes[mX][mY].image = new WhiteSquare();
-				grid.addChild(nodes[mX][mY].image);
-			}
-		
+			nodes[mX][mY].setImage(maxPoint);
+			grid.addChild(nodes[mX][mY].image);
 		}
 		
 		public function moveTime( ):void
@@ -1714,6 +1712,7 @@ package {
 			
 			mcX_tween.addEventListener(TweenEvent.MOTION_FINISH, tweenFinishHandler);
 		}
+		
 		
 	}
 }
