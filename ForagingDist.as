@@ -572,9 +572,8 @@ package {
 					//uiContainer.removeChild(resource);
 					break;
 				case 3:
-					uiContainer.removeChild(squareYi);
-					uiContainer.removeChild(squareWi);
-					removeChild(uiContainer);
+					
+					//removeChild(uiContainer);
 					break;
 				case 4:
 					
@@ -1343,7 +1342,7 @@ package {
 					instructField.text = "You explore space by sending out probes.\nEach probe can only scan a small subsection of space,\n and you have a limited supply.\n";
 					addChild(instructField);
 					//add image of a resource
-					var resource = new asteroid();
+					//var resource = new asteroid();
 					//resource.x = VIEW_XWINDOW / 2;
 					// resource.y = (VIEW_YWINDOW / 2) - 75;
 					// resource.name = "r1";
@@ -1364,33 +1363,19 @@ package {
 					break;
 				case 3:
 					//instructField.text = "Probes are deployed by clicking anywhere in space.\n They will scan the area of space indicated around your mouse cursor.\n Each time you scan, a small white box will appear for a short time\n demonstrating the area that was scanned.\n If you find a planet the box will appear yellow instead,\n and the number of planets found will be added to your score.\n Try to find as many planets as you can before running out of probes.\n\n Note: Please turn on your computer's sound"
-					instructField.text = "One probe is deployed each time you click on a location in space.\n The probe will scan the area indicated by your mouse cursor \n If a probe finds no planets, a white box will appear in the cursor area.\n If one or more planets are found, a yellow box will appear instead, \nand one or more chimes will sound and the number of planets found will be added to your score.\n Try to find as many planets as you can before running out of probes.\n\nNote: Planet locations are NOT related to the background image."
+					instructField.text = "One probe is deployed each time you click on a location in space.\n The probe will scan the area indicated by your mouse cursor \n\n If a probe finds no planets, a white box will appear in the cursor area.\n If one or more planets are found, a red box will appear instead, \nand one or more chimes will sound and the number of planets found will be added to your score.\n\n Try to find as many planets as you can before running out of probes.\nBrighter shades of red indicate a higher value.\n\nNote: Planet locations are NOT related to the background image."
+					//addChild(uiContainer);
 					addChild(instructField);
-					squareWi.gotoAndPlay(1);
-					squareWi.x = 1070;
-					squareWi.y = 570;
-					squareYi.gotoAndPlay(1);
-					squareYi.x = 1070;
-					squareYi.y = 605;
-					uiContainer.addChild(squareYi);
-					uiContainer.addChild(squareWi);
-					addChild(uiContainer);
-					
 					stage.addEventListener(MouseEvent.CLICK, instructionsClickHandler);
 					break;
 				case 4: 
-					if (moveTimeCondition) {
-						instructField.text = "You will play the game twice.\n The first time probes will require a small amount of time to travel based on the distance between clicks. \nThe second time probes will travel instantly. \n You will have a short practice trial before each full trial.";
-					}
-					else {
-						instructField.text = "You will play the game twice.\n The first time probes will deploy as fast as you can click \nThe second time probes will have a travel time based on how far apart you clicked. \n You will have a short practice trial before each full trial.";
-					}
+					instructField.text = "You will have a short practice trial before the full trial.";
 					addChild(instructField);
 					
 					stage.addEventListener(MouseEvent.CLICK, instructionsClickHandler);
 					break;
 				case 5:
-					instructField.text = "The Federation recognizes its best!\n Your score across all 3 trials will be tallied and compared to other participants.\n With skill, and a bit of luck YOU could be immortalized on the Leaderboards!";
+					instructField.text = "The Federation recognizes its best!\n Your score will be compared to other participants.\n With skill, and a bit of luck YOU could be immortalized on the Leaderboards!";
 					addChild(instructField);
 					stage.addEventListener(MouseEvent.CLICK, instructionsClickHandler);
 					break;
@@ -1402,17 +1387,17 @@ package {
 				case 7:
 					if (clusteringCondition == "1")
 					{
-						instructField.text = "While you play planets will be distributed in a very clustered pattern. \n\nThe next screen will be an example of how clustered planets look.\n\n";
+						instructField.text = "While you play planets will be distributed in a very clustered pattern. \n\nThe next screen will be an example of how clustered planets look.\n Remember: higher value planets are brighter red.\n\n";
 						//display an example of clustered resources
 					}
 					else if (clusteringCondition == "3")
 					{
-						instructField.text = "While you play planets will be distributed in a somewhat clustered pattern. \n\nThe next screen will be an example of how clustered planets look.\n\n";
+						instructField.text = "While you play planets will be distributed in a somewhat clustered pattern. \n\nThe next screen will be an example of how clustered planets look.\n Remember: higher value planets are brighter red.\n\n";
 						//display an example of clustered resources
 					}
 					else
 					{
-						instructField.text = "While you play planets will be distributed in a random pattern. \n\nThe next screen will be an example of how random planets may appear. \n\n";
+						instructField.text = "While you play planets will be distributed in a random pattern. \n\nThe next screen will be an example of how random planets may appear.\n Remember: higher value planets are brighter red.\n\n";
 						//display an example of random resources
 					}
 					addChild(instructField);
